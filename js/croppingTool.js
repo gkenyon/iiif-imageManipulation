@@ -6,14 +6,14 @@
  *
  */
 var croptool = {
-    
+
     /* initialise  */
     init: function () {
         this.crop();
     },
-    
+
     crop: function () {
-        
+
         var clipboard = new Clipboard('.btn');
         clipboard.on('success', function (e) {
             e.clearSelection();
@@ -32,13 +32,13 @@ var croptool = {
             $('button.btn-copy-link').attr('data-original-title', 'Copy link to clipboard');
             elem.setAttribute('aria-label', 'Copy link to clipboard');
         }
-        
+
         /* page HTML */
-        
+
         /* page intro: localise */
         var page_intro =
         '    <div class="crop-align">' +
-        '        <div class="pull-left"><img src="img/ucd_logo_sm.png" style="max-height:32px;"></img></div>' +
+        '        <div class="pull-left"><img src="https://americanhistory.si.edu/sites/all/themes/nmah2018/images/nmah-header-logo.png"></img></div>' +
         '        <h2>IIIF Image Manipulation Tool</h2>' +
         '        <h3>Crop and Re-size Images</h3>' +
         '        <div class="panel panel-default">' +
@@ -49,9 +49,9 @@ var croptool = {
         '            </div>' +
         '        </div>' +
         '    </div>';
-        
+
         var page_end;
-        
+
         var image_selection =
         '    <div class="crop-align">' +
         '        <div class="hidden image_error"></div>' +
@@ -59,14 +59,14 @@ var croptool = {
         '        <p>Use the mouse (or a fingertip) to select all or a portion of an image in the Crop Box (or enter numbers in the coordinates boxes below).</p>' +
         '        <p id="set-select-all"><i class="fa fa-chevron-circle-right fa-lg" style="color: green;" aria-hidden="true"></i> You can also <a class="select_all">select the entire image</a>.</p>' +
         '    </div>';
-        
+
         var image_display =
         '    <div id="interface" class="row text-center page-interface">' +
         '        <div class="crop-align">' +
         '            <img src id="target"/>' +
         '        </div>' +
         '    </div>';
-        
+
         var image_navbox =
         '    <div class="nav-box">' +
         '        <form onsubmit="return false;" id="text-inputs" class="form form-inline">' +
@@ -179,17 +179,17 @@ var croptool = {
         '            </div>' +
         '        </form>' +
         '    </div>';
-        
+
         /* inject HTML */
         $("#cropping_tool").append(page_intro).append(image_selection).append(image_display).append(image_navbox);
-        
+
         var imageID = getParameterByName('imageID');
-        
+
         /* get metadata about requested image from IIIF server */
         var info_url = imageID + '/info.json';
         var result = {
         };
-        
+
         $.ajax({
             async: true,
             url: info_url,
@@ -226,7 +226,7 @@ var croptool = {
                 getImageData();
             }
         });
-        
+
         function showImageInfoLoadError(status_code) {
             $("#set-select-all").hide();
             switch (status_code) {
@@ -250,7 +250,7 @@ var croptool = {
             }
             return true;
         }
-        
+
         function getParameterByName(name, url) {
             if (! url) url = window.location.href;
             name = name.replace(/[\[\]]/g, "\\$&");
@@ -260,22 +260,22 @@ var croptool = {
             if (! results[2]) return '';
             return results[2].replace(/\+/g, "%20");
         }
-        
+
         function preload(arrayOfImages) {
             $(arrayOfImages).each(function () {
                 $('<img/>')[0].src = this;
             });
         }
-        
+
         function getImageData() {
             /* image info from info.json */
             var width = result.width;
             var height = result.height;
             var multiplier = (width / 800);
             $("#multiplier").val(multiplier);
-            
+
             /* get image height and width ; use setInterval to account for latency */
-            
+
             function get_target_details() {
                 var img_display_size = document.getElementById('target');
                 if (img_display_size.clientWidth == undefined) {
@@ -283,14 +283,14 @@ var croptool = {
                 }
                 return img_display_size;
             }
-            
+
             var iiif_rotation = '0';
             var iiif_format = '.jpg';
             var iiif_quality = 'default';
             var sizeAboveFull = false;
-            
+
             /* API v. 1.0 and 1.1 use 'native' rather than 'default' */
-            
+
             if (result[ '@context'] !== undefined) {
                 if (result[ '@context'].match(/image\-api\/1\.1/) || result[ '@context'].match(/image\-api\/1\.0/)) {
                     iiif_quality = 'native';
@@ -298,7 +298,7 @@ var croptool = {
             } else if (result.qualities !== undefined) {
                 iiif_quality = 'native';
             }
-            
+
             if (result.profile.constructor == Array) {
                 $.each(result.profile, function (index, value) {
                     if (value.formats !== undefined) {
@@ -356,16 +356,16 @@ var croptool = {
                     }
                 });
             }
-            
+
             var iiif_width;
             if (width < 800) {
                 iiif_width = width + ',';
             } else {
                 iiif_width = '800,';
             }
-            
+
             var getTargetDetails, img_display_width, img_display_height;
-            
+
             var getTargetInterval = setInterval(function () {
                 getTargetDetails = get_target_details();
                 if (getTargetDetails.clientWidth !== undefined) {
@@ -376,14 +376,14 @@ var croptool = {
                 }
             },
             500);
-            
+
             /* image details for display on page */
-            
+
             if (imageID !== undefined) {
                 var uri_decoded = imageID + '/full/' + iiif_width + '/' + iiif_rotation + '/' + iiif_quality + iiif_format;
                 preload([uri_decoded]);
                 var loadImage = $('#target').attr("src", uri_decoded);
-                
+
                 var image_status = waitForImage();
                 if (loadImage.naturalWidth !== "undefined" && loadImage.naturalWidth === 0) {
                     $('#target').attr("src", "img/404-not-found.png");
@@ -405,11 +405,11 @@ var croptool = {
                     });
                 }
             }
-            
+
             $("input:radio[name=img_width]").click(function () {
                 iiif_width = $(this).val() + ',';
             });
-            
+
             $("input:text[name=img_width_other]").change(function () {
                 if ($(this).val() == 'full') {
                     iiif_width = 'full';
@@ -423,7 +423,7 @@ var croptool = {
                     }
                 }
             });
-            
+
             /* arbitrary image rotation */
             $("input:text[name=img_rotation]").change(function () {
                 var degrees = $(this).val();
@@ -437,7 +437,7 @@ var croptool = {
                     console.log('bad value for image rotation');
                 }
             });
-            
+
             $("input:radio[name=img_rotation]").click(function () {
                 iiif_rotation = $(this).val();
             });
@@ -447,27 +447,27 @@ var croptool = {
             $("input:radio[name=img_quality]").click(function () {
                 iiif_quality = $(this).val();
             });
-            
+
             var d = document, ge = 'getElementById';
-            
+
             $('#interface').on('cropmove cropend', function (e, s, c) {
                 var iiif_region = Math.round((c.x * multiplier)) + ',' + Math.round(c.y * multiplier) + ',' + Math.round(c.w * multiplier) + ',' + Math.round(c.h * multiplier);
                 $('#iiif').attr('value', imageID + '/' + iiif_region + '/' + iiif_width + '/' + iiif_rotation + '/' + iiif_quality + iiif_format);
                 $('#get_url').attr('data-mfp-src', imageID + '/' + iiif_region + '/' + iiif_width + '/' + iiif_rotation + '/' + iiif_quality + iiif_format);
                 $('.img_download').attr('href', imageID + '/' + iiif_region + '/' + iiif_width + '/' + iiif_rotation + '/' + iiif_quality + iiif_format);
-                
+
                 d[ge]('crop-x').value = c.x;
                 d[ge]('crop-y').value = Math.round(c.y);
                 d[ge]('crop-w').value = c.w;
                 d[ge]('crop-h').value = c.h;
             });
-            
+
             /* set selection coords */
             var sel_x = Math.round(img_display_width / 4);
             var sel_y = Math.round(img_display_height / 4);
             var sel_x1 = Math.round(img_display_width / 2);
             var sel_y1 = Math.round(img_display_height / 2);
-            
+
             $(".select_all").click(function () {
                 console.log('select_all');
                 if (img_display_height == 0) {
@@ -478,12 +478,12 @@ var croptool = {
                 $('#target').Jcrop('api').animateTo([
                 0, 0, img_display_width, img_display_height]);
             });
-            
+
             var src;
             if (imageID !== undefined) {
                 src = imageID + '/full/800,/0/' + iiif_quality + '.jpg';
             }
-            
+
             $('#text-inputs').on('change', 'input', function (e) {
                 $('#target').Jcrop('api').animateTo([
                 parseInt(d[ge]('crop-x').value),
@@ -491,7 +491,7 @@ var croptool = {
                 parseInt(d[ge]('crop-w').value),
                 parseInt(d[ge]('crop-h').value)]);
             });
-            
+
             /* there can be significant latency loading the image, so ... */
             function waitForImage() {
                 img_display_size = document.getElementById('target');
@@ -515,24 +515,24 @@ var croptool = {
                 }
                 return true;
             }
-            
+
             if (img_display_width > 0) {
                 $('p.wait-spinner').hide();
             } else {
                 var tmp = waitForImage();
             }
         }
-        
+
         /* popup a preview image */
         $('#get_url').magnificPopup({
             type: 'image'
         });
-        
+
         /* initialise boostrap tooltips */
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
         })
-        
+
         /* toggle hide/show more options - not implemented */
         $('#iiif_format-switch').on('show', function () {
             $('#iiif_format-switch').html('hide options');
