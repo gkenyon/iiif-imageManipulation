@@ -183,8 +183,11 @@ var croptool = {
         /* inject HTML */
         $("#cropping_tool").append(page_intro).append(image_selection).append(image_display).append(image_navbox);
 
-        var imageID = getParameterByName('imageID');
 
+
+        var imageID = getParameterByName('imageID');
+        var imageID = document.getElementByID
+        'idsid'
         /* get metadata about requested image from IIIF server */
         var info_url = imageID + '/info.json';
         var result = {
