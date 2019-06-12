@@ -52,10 +52,6 @@ var croptool = {
         var page_end;
 
         var image_selection =
-        '<div>'+
-        '<input type="text" maxlength="512" id="searchTxt" />'+
-        '<button onclick="add(document.getElementById('searchTxt').value)">Get IIIF Image!</button>'+
-        '</div>'+
         '    <div class="crop-align">' +
         '        <div class="hidden image_error"></div>' +
         '        <h4>1: Select Image Area</h4>' +
