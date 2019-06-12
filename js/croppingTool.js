@@ -48,8 +48,11 @@ var croptool = {
         '                <!-- <p>Please visit our <a href="/help">Help</a> page for further information.</p> -->' +
         '            </div>' +
         '        </div>' +
-        '    </div>';
-
+        '    </div>'+
+        '<div>'+
+        '<input type="text" maxlength="512" id="searchTxt" />'+
+        '<button onclick="add(document.getElementById('searchTxt').value)">Get IIIF Image!</button>'+
+        '</div>';
         var page_end;
 
         var image_selection =
@@ -183,11 +186,9 @@ var croptool = {
         /* inject HTML */
         $("#cropping_tool").append(page_intro).append(image_selection).append(image_display).append(image_navbox);
 
+        var imageID = document.querySelector('#searchTxt').value;
 
 
-        var imageID = getParameterByName('imageID');
-        var imageID = document.getElementByID
-        'idsid'
         /* get metadata about requested image from IIIF server */
         var info_url = imageID + '/info.json';
         var result = {
