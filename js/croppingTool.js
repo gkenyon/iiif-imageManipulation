@@ -49,7 +49,6 @@ var croptool = {
         '            </div>' +
         '        </div>' +
         '    </div>';
-        var page_end;
 
         var image_selection =
         '    <div class="crop-align">' +
@@ -182,8 +181,10 @@ var croptool = {
         /* inject HTML */
         $("#cropping_tool").append(page_intro).append(image_selection).append(image_display).append(image_navbox);
 
-        var imageID = document.querySelector('#searchTxt').value;
 
+
+        var info_url = document.getElementById("URL").value;
+            url = "https://ids.si.edu/ids/iiif/" + url ;
 
         /* get metadata about requested image from IIIF server */
         var info_url = imageID + '/info.json';
@@ -251,8 +252,8 @@ var croptool = {
             return true;
         }
 
-        function getParameterByName(name, url) {
-            if (! url) url = window.location.href;
+
+        document.getElementById("URL").value {
             name = name.replace(/[\[\]]/g, "\\$&");
             var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
             results = regex.exec(url);
@@ -425,28 +426,7 @@ var croptool = {
             });
 
             /* arbitrary image rotation */
-            $("input:text[name=img_rotation]").change(function () {
-                var degrees = $(this).val();
-                if ((degrees + "").match(/^\d+$/)) {
-                    if (degrees < 361) {
-                        iiif_rotation = degrees;
-                    } else {
-                        console.log('bad value for image rotation');
-                    }
-                } else {
-                    console.log('bad value for image rotation');
-                }
-            });
 
-            $("input:radio[name=img_rotation]").click(function () {
-                iiif_rotation = $(this).val();
-            });
-            $("input:radio[name=img_format]").click(function () {
-                iiif_format = $(this).val();
-            });
-            $("input:radio[name=img_quality]").click(function () {
-                iiif_quality = $(this).val();
-            });
 
             var d = document, ge = 'getElementById';
 
